@@ -62,7 +62,7 @@ df = df[1:]
 def timetable(df):
     #--Initialise Timetable matrix--#
     #Init day row first
-    row = [0 for j in range(10)]
+    row = [0 for j in range(16)]
 
     #init 5 days
     wk = [row.copy() for j in range(5)]
