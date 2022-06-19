@@ -10,9 +10,13 @@ the getter() function call in teh for loop after mods_list variable takes in the
 
 This information is saved as mods1.csv.
 
+edit 2022: You can now just double click the `.py` file to launch in command prompt. I included input functions to make it less scary for non-coders.
+
 ## timetable.py
 This contains the clashing algorithm.
 
 N_mods variable tells the algorithm how many modules you plan on taking the next semester.
 
 Further selection criteria is provided in the code to allow you to select the maximum number of each level of modules you want to take in the semester.
+
+edit 2022: You can now just double click the `.py` file to launch in command prompt. I included input functions to make it less scary for non-coders.
