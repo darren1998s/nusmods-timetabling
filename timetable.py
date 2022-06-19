@@ -1,5 +1,6 @@
 from itertools import combinations
 import csv
+import glob
 def read_csv(csvfilename):
     """
     Reads a csv file and returns a list of list
@@ -30,7 +31,7 @@ def expand(start,end):
 def classify(modules):
     dictionary = {'1':0,'2':0,'3':0,'4':0}
     for mod in modules:
-        dictionary[mod[3]] += 1
+        dictionary[mod[-4]] += 1
     return dictionary
 
 
@@ -55,8 +56,10 @@ def classify(modules):
 12 = end time of mod for 4th slot
 
 '''
-df = read_csv('mods1.csv')
+fn_file = input('Filename generated from nusmods.py, do not include the file type: ')
+df = read_csv(f'{fn_file}.csv')
 df = df[1:]
+
 #print(df)
 
 def timetable(df):
@@ -75,6 +78,7 @@ def timetable(df):
         #this gives me a list of things to populate the matrix with
         expanded_time = expand(mod[2],mod[3])
         for period in expanded_time:
+
             if wk[int(mod[1])-1][int(period)-8] == 0:
                 wk[int(mod[1])-1][int(period)-8] = mod[0]
             else:
@@ -129,15 +133,12 @@ def timetable(df):
     #print('PASS')
     return lst
 
-N_mods = 5
-
+N_mods = int(input('Number of mods you want to take this semester: '))
+#N_mods = 2
 
 combi = []
-
 for mm in combinations(df,N_mods):
-    #print(mm)
     switch = 0
-
     for i in range(N_mods):
         for j in range(i+1,N_mods):
             if mm[i][0] == mm[j][0]:
@@ -146,25 +147,58 @@ for mm in combinations(df,N_mods):
     if switch == 0:
         combi.append(mm)
 
-
+#print(combi)
 mods_lst = []
 
 for mm in combi:
+    
     ml = timetable(mm)
     if ml != 'CONFLICT':
         if sorted(ml) not in mods_lst:
             mods_lst.append(sorted(ml))
 
+print(mods_lst)
+
 ##Further selection Criteria##
-
-#Below are maximum mods of 1k,2k,3k,4k mods you wanna take in a sem
-N_4k = 4
-N_3k = 2
-N_2k = 4
-N_1k = 1
-
+print()
+print()
+print()
 print('\nList of Mods you can take')
+print(mods_lst)
+print()
+
+
+print('\n\nAdding Required Modules. Type "Done" or "done" if there are no more modules you wish to add')
+req_mod = []
+while True:
+    which_mod = input('Which modules do you NEED to take?:')
+    if which_mod == 'Done' or which_mod == 'done':
+        break
+    req_mod.append(which_mod)
+
+
+req_mod = set(req_mod)
+# Add required modules:
+for lst_mods in mods_lst:
+    if req_mod.issubset(set(lst_mods)):
+        print(f'This set of modules have your required mods {req_mod} in it')
+        print(lst_mods)
+
+print()
+#Below are maximum mods of 1k,2k,3k,4k mods you wanna take in a sem
+N_4k = 3
+N_3k = 1
+N_2k = 4
+N_1k = 5
+print(f'Filtering all mod combinations for the following criteria')
+print('To change the criteria, you would need to edit this .py file, located on lines 179 to 182')
+print(f'Maximum 4Ks: {N_4k}, Maximum 3Ks: {N_3k}, Maximum 2Ks: {N_2k}, Maximum 1Ks: {N_1k} ')
 for lst_mods in mods_lst:
     ddict = classify(lst_mods)
     if ddict['4'] <= N_4k and ddict['3'] <= N_3k and ddict['2'] <= N_2k and ddict['1'] <= N_1k:
         print(lst_mods)
+
+while True:
+    break_inp = input('type literally anything to end this programme: ')
+    if break_inp:
+        break

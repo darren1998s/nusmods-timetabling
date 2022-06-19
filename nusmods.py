@@ -123,10 +123,32 @@ def getter(AY,module_code,semester):
 
 		return checker(class_row)
 
-mods_list = ['LSM3234','COS2000','LSM2241','LSM4227','LSM3233','LSM3235','LSM3227','LSM4243']
+### END OF FN ###
+
+# Check for AY first
+acad_year = int(input("What is the AY you want? (Type 22 if you're looking for AY22/23): "))
+
+# Check for semester
+which_sem = int(input('Which Semester? 1 for Sem 1 and 2 for Sem 2: '))
+
+# Check for mods list
+
+mods_list = []
+
+print('\n\nAdding Modules. Type "Done" or "done" if there are no more modules you wish to add')
+
+while True:
+	which_mod = input('Which module do you want to add to the scheduler?:')
+	
+	if which_mod == 'Done' or which_mod == 'done':
+		break
+	mods_list.append(which_mod)
+
+print('\n')
 rows = []
 for mod in mods_list:
-	for row in getter(20,mod,1):
+	print(f'Getting {mod}...')
+	for row in getter(acad_year,mod,which_sem):
 		rows.append(row)
 		#print(row)
 
@@ -138,12 +160,9 @@ for row in rows:
 
 rows = temp_row
 
-#print(rows)
+fn_file = input('What is the filename you want to save this as (please do not add the file type): ')
 
-
-#print(rows)
-
-with open('mods1.csv', mode = 'w', newline='\n') as file:
+with open(f'{fn_file}.csv', mode = 'w', newline='\n') as file:
 	Fwriter = csv.writer(file, delimiter=',')
 	Fwriter.writerow(['module,day1,start1,end1,day2,start2,end2,day3,start3,end3,day4,start4,end4'])
 	for mod in rows:
